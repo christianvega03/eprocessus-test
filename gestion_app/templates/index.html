@@ -1,9 +1,182 @@
-<html>
-<head><title>Home Page</title></head>
-<body>
-Hello world nuevo - version 1 
-Agregamos texto a la página
-Agregadoo
-</body>
-</html>
+{% extends 'base.html' %}
 
+{% block content %}
+  <div class="container text-center pt-5">
+    <h1>Seguimiento Procesamiento Observaciones</h1>
+
+              <div>
+          	<table id="myTable">
+          		<tr bgcolor="teal">
+          			{% for i in headers %}
+            			<td><b><center>{{i}}</center></b></td>
+          			{% endfor %}
+
+       	 		</tr>
+        			{% for row in registros %}
+          			<tr>
+              
+              			{%for k,v in row.items %}
+
+              			{% if k == dias%}
+             
+                				<td id="alerta">{{v}}</td>
+
+                		{% else %}
+                				<td>{{v}}</td>
+
+                		{%endif %}
+
+
+              
+              	{% endfor %}                                                                  
+              
+                </tr>
+        {% endfor %}
+      </table>
+
+
+
+
+
+    </div>
+
+
+
+
+
+
+
+
+
+    <div class='jumbotron text-left'>
+      <form action="{% url 'index' %}" method="post">
+        {% csrf_token %}
+        {% for field in register_form %}
+        <div class='form-group'>
+          <label for="{{ field.name }}">{{ field.label }}</label>
+          {{ field }}
+        </div>
+        {% endfor %}
+        <br>
+
+        <h2><center><bold>Descripción de Estados</bold></center></h2>
+ 
+        <center>Abierto: Observación levantada por inmobiliaria</center>
+        <center>En Proceso: Observación en proceso de normalización (una vez agregada la visista de la constructora)</center>
+        <center>Cerrada: Observaciones ya cerrada por la constructora</center>
+
+        <br>
+        <center>
+		<button style="font-size:24px">Exportar Reporte <i class="fa fa-file-pdf-o"></i></button>
+		</center>
+      </form>
+
+
+
+
+
+
+
+    </div>
+  </div>
+
+
+
+
+
+<style>
+
+table tr#alerta {background-color:red;}
+
+#myInput {
+    background-image: url(https://www.w3schools.com/css/searchicon.png); /* Add a search icon to input */
+    background-position: 10px 12px; /* Position the search icon */
+    background-repeat: no-repeat; /* Do not repeat the icon image */
+    width: 100%; /* Full-width */
+    font-size: 16px; /* Increase font-size */
+    padding: 12px 20px 12px 40px; /* Add some padding */
+    border: 1px solid #ddd; /* Add a grey border */
+    margin-bottom: 12px; /* Add some space below the input */
+}
+
+#myTable {
+    border-collapse: collapse; /* Collapse borders */
+    width: 100%; /* Full-width */
+    border: 1px solid #ddd; /* Add a grey border */
+    font-size: 18px; /* Increase font-size */
+}
+
+#myTable th, #myTable td {
+    text-align: left; /* Left-align text */
+    padding: 12px; /* Add padding */
+}
+
+#myTable tr {
+    /* Add a bottom border to all table rows */
+    border-bottom: 1px solid #ddd; 
+}
+
+#myTable tr.header, #myTable tr:hover {
+    /* Add a grey background color to the table header and on hover */
+    background-color: #ffff99;
+    color: black;
+}
+
+
+
+
+#consolidado{
+    border-collapse: collapse; /* Collapse borders */
+    width: 50%; /* Full-width */
+    border: 1px solid #ddd; /* Add a grey border */
+    font-size: 18px; /* Increase font-size */
+}
+
+#consolidado th, #consolidado td {
+    text-align: center; /* Left-align text */
+    padding: 12px; /* Add padding */
+}
+
+#consolidado tr {
+    /* Add a bottom border to all table rows */
+    border-bottom: 1px solid #ddd; 
+}
+
+#consolidado tr.header, #consolidado tr:hover {
+    /* Add a grey background color to the table header and on hover */
+    background-color: #f1f1f1;
+}
+</style>
+
+
+<script>
+var table = document.getElementById('myTable');
+var tbody = table.getElementsByTagName('tbody')[0];
+var cells = tbody.getElementsByTagName('td');
+console.log(cells)
+
+for (var i=0, len=cells.length; i<len; i++){
+    if (parseInt(cells[i].innerHTML,10) > 9 && (i-8)%10 ==0 ){
+        cells[i].style.backgroundColor = 'red';
+    }
+    else if (parseInt(cells[i].innerHTML,10) >5 && parseInt(cells[i].innerHTML,10) < 10          && (i-8)%10 ==0 ){
+        cells[i].style.backgroundColor = 'coral';
+
+    }
+
+    else if (parseInt(cells[i].innerHTML,10) <6 && (i-8)%10 ==0 ){
+        cells[i].style.backgroundColor = 'green';
+    }
+}
+</script>
+
+
+
+
+
+
+
+
+
+
+ {% endblock content %}
